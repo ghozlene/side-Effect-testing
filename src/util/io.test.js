@@ -21,4 +21,12 @@ describe('writeData()', () => {
 		expect(fs.writeFile).toBeCalledWith(fileName, testData);
 		//return expect(writeData(testData, fileName)).resolves.toBeUndefined();
 	});
+
+	it('should return a promise that resolves to no value if called correctly', () => {
+		const testData = 'Achref';
+		const fileName = 'test.txt';
+		writeData(testData, fileName);
+		//expect(fs.writeFile).toBeCalledWith(fileName, testData);
+		return expect(writeData(testData, fileName)).resolves.toBeUndefined();
+	});
 });
