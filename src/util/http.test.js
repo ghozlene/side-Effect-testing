@@ -1,4 +1,5 @@
 import { it, vi, expect, describe } from 'vitest';
+import { HttpError } from './errors';
 import { sendDataRequest } from './http';
 
 const testResponseData = {
@@ -39,5 +40,23 @@ describe('sendDataRequest()', () => {
 		}
 
 		expect(errorMessage).not.toBe('not a string');
+	});
+
+	it('should throw an HttpError in case f non-ok response', () => {
+		testFn.mockImplementationOnce((url, options) => {
+			return new Promise((reslove, reject) => {
+				const testResp = {
+					ok: false,
+					json() {
+						return new Promise((resolve, reject) => {
+							resolve(testResponseData);
+						});
+					},
+				};
+				reslove(testResp);
+			});
+		});
+		const testData = { key: 'test' };
+		return expect(sendDataRequest(testData)).rejects.instanceof(HttpError);
 	});
 });
